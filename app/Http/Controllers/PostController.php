@@ -28,7 +28,7 @@ class PostController extends Controller
             })
             ->when($request->filled('tag'), function (Builder $query) use ($request): void {
                 $query->whereHas('tags', function (Builder $tagQuery) use ($request): void {
-                    $tagQuery->where('tags.id', $request->integer('tag'));
+                    $tagQuery->where('name', (string) $request->string('tag'));
                 });
             })
             ->orderByDesc('is_pinned')
@@ -47,13 +47,12 @@ class PostController extends Controller
 
     public function show(Post $post): View
     {
-        $post->load(['author', 'tags']);
-        $post->load('comments.user');
-
         abort_unless($post->is_published, 404);
 
         $post->views++;
         $post->save();
+        $post->load(['author', 'tags', 'comments.user']);
+        $post->setRelation('comments', $post->comments->sortByDesc('created_at')->values());
 
         return view('posts.show', compact('post'));
     }

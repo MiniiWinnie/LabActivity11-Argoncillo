@@ -27,7 +27,7 @@
             <select name="tag" class="rounded border border-slate-300 px-3 py-2">
                 <option value="">All tags</option>
                 @foreach ($tags as $tag)
-                    <option value="{{ $tag->id }}" @selected((string) request('tag') === (string) $tag->id)>
+                    <option value="{{ $tag->name }}" @selected(request('tag') === $tag->name)>
                         {{ $tag->name }}
                     </option>
                 @endforeach

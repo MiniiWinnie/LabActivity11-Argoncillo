@@ -10,7 +10,11 @@ class AuthorController extends Controller
 {
     public function show(Author $author): View
     {
-        $author->load(['posts' => fn (HasMany $query) => $query->latest('published_at')])
+        $author->load([
+            'posts' => fn (HasMany $query) => $query
+                ->where('is_published', true)
+                ->latest('published_at'),
+        ])
             ->loadCount('comments');
 
         return view('authors.show', compact('author'));

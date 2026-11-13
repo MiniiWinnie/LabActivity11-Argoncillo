@@ -43,7 +43,7 @@ class BulletinRelationshipsTest extends TestCase
             'body' => 'Useful update',
         ]);
 
-        $this->get(route('posts.index', ['tag' => $tag->id]))
+        $this->get(route('posts.index', ['tag' => $tag->name]))
             ->assertOk()
             ->assertSee('Tagged announcement');
 
