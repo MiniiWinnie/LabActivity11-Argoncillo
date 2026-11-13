@@ -26,7 +26,7 @@ The five seeded tags are:
 - Health
 
 Each post receives one to three tags through the `post_tag` pivot using
-`sync()`. The posts index supports filtering with `?tag={tag-id}`.
+`sync()`. The posts index supports filtering with `?tag={tag-name}`.
 
 ## Relationship map
 
