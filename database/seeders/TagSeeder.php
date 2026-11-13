@@ -12,8 +12,12 @@ class TagSeeder extends Seeder
     {
         $tags = collect(['Purok Argoncillo', 'Urgent', 'Libre', 'Schedule', 'Health'])
             ->mapWithKeys(fn (string $name): array => [$name => Tag::create(['name' => $name])->id]);
+        $pinnedPost = Post::where('is_pinned', true)->firstOrFail();
+
         foreach (Post::all() as $post) {
-            $post->tags()->sync($tags->random(rand(1, 3))->values());
+            $post->tags()->sync($post->is($pinnedPost)
+                ? [$tags['Purok Argoncillo'], $tags['Urgent']]
+                : $tags->random(rand(1, 3))->values());
         }
     }
 }

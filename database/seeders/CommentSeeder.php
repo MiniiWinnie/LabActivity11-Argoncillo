@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -16,13 +17,16 @@ class CommentSeeder extends Seeder
         foreach (Post::where('is_published', true)->get() as $publishedPost) {
             $commentCount = $publishedPost->is($post) ? 3 : random_int(0, 5);
 
+            if ($publishedPost->is($post)) {
+                Comment::factory()->for($publishedPost)->for($lola, 'user')->create();
+                $commentCount--;
+            }
+
             for ($index = 0; $index < $commentCount; $index++) {
-                $publishedPost->comments()->create([
-                    'user_id' => $publishedPost->is($post) && $index === 0
-                        ? $lola->id
-                        : User::inRandomOrder()->value('id'),
-                    'body' => fake()->sentence(random_int(4, 10)),
-                ]);
+                Comment::factory()
+                    ->for($publishedPost)
+                    ->for(User::inRandomOrder()->firstOrFail(), 'user')
+                    ->create();
             }
         }
     }

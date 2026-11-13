@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Author;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -14,12 +16,16 @@ class UserSeeder extends Seeder
         User::create([
             'name' => 'Lola Argoncillo',
             'email' => 'lola.argoncillo@bulletin.test',
-            'password' => 'bulletin2026',
+            'password' => Hash::make('bulletin2026'),
         ]);
-        User::create([
+        $kagawad = User::create([
             'name' => 'Kagawad Argoncillo',
             'email' => 'kagawad.argoncillo@bulletin.test',
-            'password' => 'bulletin2026',
+            'password' => Hash::make('bulletin2026'),
+        ]);
+
+        Author::where('email', $kagawad->email)->firstOrFail()->update([
+            'user_id' => $kagawad->id,
         ]);
     }
 }

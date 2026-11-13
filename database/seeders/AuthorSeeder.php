@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Author;
-use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class AuthorSeeder extends Seeder
@@ -13,10 +12,7 @@ class AuthorSeeder extends Seeder
      */
     public function run(): void
     {
-        $kagawad = User::where('email', 'kagawad.argoncillo@bulletin.test')->firstOrFail();
-
         Author::create([
-            'user_id' => $kagawad->id,
             'name' => 'Kapitan Argoncillo',
             'position' => 'Kagawad',
             'email' => 'kagawad.argoncillo@bulletin.test',
