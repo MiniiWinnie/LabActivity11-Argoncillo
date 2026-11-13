@@ -62,7 +62,7 @@
                     <button class="mt-2 rounded bg-teal-700 px-4 py-2 text-white">Comment</button>
                 </form>
             @else
-                <p class="mt-4 text-sm text-slate-600"><a class="text-teal-700" href="{{ route('login') }}">Sign in</a> to comment.</p>
+                <p class="mt-4 text-sm text-slate-600"><a class="text-teal-700" href="{{ route('login') }}">Sign in to comment</a></p>
             @endauth
         </section>
     </article>

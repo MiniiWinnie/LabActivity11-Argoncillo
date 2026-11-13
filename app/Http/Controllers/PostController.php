@@ -66,11 +66,12 @@ class PostController extends Controller
     {
         $author = $request->user()->loadMissing('author')->author;
         $data = $request->validated();
+        $isPublished = (bool) ($data['is_published'] ?? false);
         unset($data['tags']);
+        $data['is_published'] = $isPublished;
+        $data['published_at'] = $isPublished ? now() : null;
         $post = $author->posts()->create([
             ...$data,
-            'is_published' => true,
-            'published_at' => now(),
         ]);
         $post->tags()->sync($request->validated('tags'));
 

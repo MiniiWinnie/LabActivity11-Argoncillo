@@ -14,11 +14,12 @@ class StorePostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:120'],
             'category' => ['required', 'string', 'in:Announcement,Health,Peace & Order,Ayuda,Purok Argoncillo'],
-            'body' => ['required', 'string'],
+            'body' => ['required', 'string', 'min:20'],
             'tags' => ['required', 'array', 'min:1'],
-            'tags.*' => ['integer', 'exists:tags,id'],
+            'tags.*' => ['exists:tags,id'],
+            'is_published' => ['boolean'],
         ];
     }
 }

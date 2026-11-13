@@ -16,6 +16,6 @@ class CommentController extends Controller
             'user_id' => $request->user()->id,
         ]);
 
-        return back()->with('success', 'Comment added.');
+        return redirect()->route('posts.show', $post)->with('status', 'Comment posted.');
     }
 }

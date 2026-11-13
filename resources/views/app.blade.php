@@ -13,7 +13,9 @@
             <div class="flex items-center gap-6 text-sm font-medium text-slate-600">
                 @auth
                     <a href="{{ route('posts.index') }}" class="text-teal-700">Posts</a>
-                    <a href="{{ route('posts.create') }}" class="text-teal-700">Write a post</a>
+                    @if ($canCreatePosts)
+                        <a href="{{ route('posts.create') }}" class="text-teal-700">New post</a>
+                    @endif
                     <span>Hi, {{ auth()->user()->name }}</span>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
@@ -28,6 +30,13 @@
     </header>
 
     <main>
+        @if (session('status'))
+            <div class="mx-auto max-w-7xl px-6 pt-6">
+                <p class="rounded border border-teal-200 bg-teal-50 px-4 py-3 text-teal-800">
+                    {{ session('status') }}
+                </p>
+            </div>
+        @endif
         @yield('content')
     </main>
 

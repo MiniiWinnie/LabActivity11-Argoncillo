@@ -23,6 +23,10 @@ class BulletinRelationshipsTest extends TestCase
             ->assertForbidden();
 
         $this->assertDatabaseCount('posts', 0);
+        $this->actingAs($resident)
+            ->get(route('posts.index'))
+            ->assertOk()
+            ->assertDontSee('New post');
     }
 
     public function test_authenticated_user_can_comment_and_filter_posts_by_tag(): void
@@ -35,7 +39,8 @@ class BulletinRelationshipsTest extends TestCase
 
         $this->actingAs($user)
             ->post(route('comments.store', $post), ['body' => 'Useful update'])
-            ->assertRedirect();
+            ->assertRedirect(route('posts.show', $post))
+            ->assertSessionHas('status', 'Comment posted.');
 
         $this->assertDatabaseHas('comments', [
             'post_id' => $post->id,
@@ -64,11 +69,14 @@ class BulletinRelationshipsTest extends TestCase
                 'category' => 'Announcement',
                 'body' => 'The schedule is now available.',
                 'tags' => [$tag->id],
+                'is_published' => true,
             ])
             ->assertRedirect();
 
         $post = Post::where('title', 'New schedule')->firstOrFail();
         $this->assertSame($author->id, $post->author_id);
+        $this->assertTrue($post->is_published);
+        $this->assertNotNull($post->published_at);
         $this->assertTrue($post->tags->contains($tag));
     }
 
