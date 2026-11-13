@@ -17,13 +17,15 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request): RedirectResponse
     {
-        $credentials = $request->validated();
-        if (! Auth::attempt($credentials)) {
-            return back()->withErrors(['email' => 'Invalid email or password.'])->onlyInput('email');
-        }
-        $request->session()->regenerate();
+        if (Auth::attempt($request->validated())) {
+            $request->session()->regenerate();
 
-        return redirect()->intended(route('posts.index'));
+            return redirect()->intended('/posts');
+        }
+
+        return back()->withErrors([
+            'email' => 'Invalid email or password.',
+        ])->onlyInput('email');
     }
 
     public function logout(Request $request): RedirectResponse
@@ -32,6 +34,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('posts.index');
+        return redirect('/login');
     }
 }

@@ -84,6 +84,21 @@ class BulletinRelationshipsTest extends TestCase
             ]);
     }
 
+    public function test_valid_login_redirects_to_posts(): void
+    {
+        $user = User::factory()->create([
+            'email' => 'resident@example.test',
+            'password' => 'bulletin2026',
+        ]);
+
+        $this->post(route('login'), [
+            'email' => $user->email,
+            'password' => 'bulletin2026',
+        ])->assertRedirect('/posts');
+
+        $this->assertAuthenticatedAs($user);
+    }
+
     public function test_author_page_displays_comments_received_through_posts(): void
     {
         $author = Author::factory()->create();
